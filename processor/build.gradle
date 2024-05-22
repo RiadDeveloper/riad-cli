@@ -1,0 +1,42 @@
+subprojects {
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    group = 'io.github.RiadDeveloper.Riad'
+
+    publishing {
+        repositories {
+            maven {
+                name = 'OSSRH'
+                url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials {
+                    username = project.properties['ossrh.username']
+                    password = project.properties['ossrh.password']
+                }
+            }
+        }
+
+        publications {
+            mavenJava(MavenPublication) {
+                pom {
+                    url = 'https://github.com/RiadDeveloper/Riad-cli/tree/2.0/processor'
+                    licenses {
+                        license {
+                            name = 'GPL-3.0'
+                            url = 'https://raw.githubusercontent.com/RiadDeveloper/Riad-cli/main/LICENSE'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/RiadDeveloper/Riad-cli.git'
+                        developerConnection = 'scm:git:ssh://github.com/RiadDeveloper/Riad-cli.git'
+                        url = 'https://github.com/RiadDeveloper/Riad-cli'
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}

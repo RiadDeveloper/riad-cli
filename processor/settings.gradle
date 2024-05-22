@@ -1,0 +1,3 @@
+rootProject.name = 'Riad-processor'
+include ':annotations'
+include ':processor'
