@@ -4,17 +4,17 @@
 set -e
 
 if ! command -v unzip >/dev/null; then
-	echo 'err: `unzip` is required to install Riad. Please install it and try again.'
+	echo 'err: `unzip` is required to install Rush. Please install it and try again.'
 	exit 1
 fi
 
-if [[ -v Riad_HOME]]; then
-  RiadHome="$Riad_HOME"
+if [[ -v RUSH_HOME]]; then
+  rushHome="$RUSH_HOME"
 else
-  if ! -v Riad >/dev/null; then
-    RiadHome="$HOME/.Riad"
+  if ! -v rush >/dev/null; then
+    rushHome="$HOME/.rush"
   else
-    RiadHome="$(dirname $(dirname $(which Riad)))"
+    rushHome="$(dirname $(dirname $(which rush)))"
   fi
 fi
 
@@ -28,19 +28,19 @@ else
   esac
 fi
 
-zipUrl="https://github.com/shreyashsaitwal/Riad-cli/releases/latest/download/Riad-$target.zip"
-curl --location --progress-bar -o "$RiadHome/Riad-$target.zip" "$zipUrl"
+zipUrl="https://github.com/shreyashsaitwal/rush-cli/releases/latest/download/rush-$target.zip"
+curl --location --progress-bar -o "$rushHome/rush-$target.zip" "$zipUrl"
 
-unzip -oq "$RiadHome/Riad-$target.zip" -d "$RiadHome"/
-rm "$RiadHome/Riad-$target.zip"
+unzip -oq "$rushHome/rush-$target.zip" -d "$rushHome"/
+rm "$rushHome/rush-$target.zip"
 
-# Make the Riad binary executable on Unix systems. 
+# Make the Rush binary executable on Unix systems. 
 if [ ! "$OS" = "Windows_NT" ]; then
-  chmod +x "$RiadHome/bin/Riad"
+  chmod +x "$rushHome/bin/rush"
 fi
 
 echo
-echo "Successfully downloaded the Riad CLI binary at $RiadHome/bin/Riad"
+echo "Successfully downloaded the Rush CLI binary at $rushHome/bin/rush"
 
 # Prompt user of they want to download dev dependencies now.
 echo "Now, proceeding to download necessary Java libraries (approx size: 170 MB)."
@@ -49,18 +49,18 @@ echo
 
 if [[ ! $REPLY =~ ^[Nn]$ ]]; then
   if [ "$OS" = "Windows_NT" ]; then
-    "./$RiadHome/bin/Riad.exe" deps sync --dev-deps --no-logo
+    "./$rushHome/bin/rush.exe" deps sync --dev-deps --no-logo
   else
-    "./$RiadHome/bin/Riad" deps sync --dev-deps --no-logo
+    "./$rushHome/bin/rush" deps sync --dev-deps --no-logo
   fi
 fi
 
 echo
 if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-  echo "Success! Installed Riad at $RiadHome/bin/Riad"
+  echo "Success! Installed Rush at $rushHome/bin/rush"
 else
-  echo "Riad has been partially installed at $RiadHome/bin/Riad"
-  echo 'Please run `Riad deps sync --dev-deps` to download the necessary Java libraries.'
+  echo "Rush has been partially installed at $rushHome/bin/rush"
+  echo 'Please run `rush deps sync --dev-deps` to download the necessary Java libraries.'
 fi
 
 case $SHELL in
@@ -70,7 +70,7 @@ esac
 
 echo
 echo "Now, add the following to your \$HOME/$shell_profile (or similar):"
-echo "export PATH=\"\$PATH:$RiadHome/bin\""
+echo "export PATH=\"\$PATH:$rushHome/bin\""
 
 echo
-echo 'Run `Riad --help` to get started.'
+echo 'Run `rush --help` to get started.'
